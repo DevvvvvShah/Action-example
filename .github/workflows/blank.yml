@@ -4,24 +4,26 @@ on:
     branches: [ "main" ]
 
 jobs:
-  check-pr:
+  comment_pr:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: peter-evans/create-or-update-comment@v3
-        if: ${{ true }}
+
+      - name: Accept PR
+        uses: thollander/actions-comment-pull-request@v2
+        if: ${{true}}
         with:
-          issue-number: ${{ github.event.issue.number }}
-          #simulation of tests on PR, since there's nothing to test rn
-          body: |
-              PR valid, wait for acceptance. Link the issue fixed if you haven't yet
-          reactions: '+1'
-      - uses: peter-evans/create-or-update-comment@v3
-        if: ${{ false }}
+        #simulating tests, because there's nothing to test rn
+          message: |
+            PR correct, link to the issue if you haven't already and wait for merge.
+          pr_number: PR_NUMBER
+
+      - name: Deny PR
+        uses: thollander/actions-comment-pull-request@v2
+        if: ${{false}}
         with:
-          issue-number: ${{ github.event.issue.number }}
-          
-          #simulation of tests on PR, since there's nothing to test rn
-          body: |
-            PR can't pass tests, something's wrong. Please fix it and try again
-          reactions: '+1'
+          message: |
+            PR has flaws, fix them before I can accept.
+          pr_number: PR_NUMBER
+    env:
+      PR_NUMBER: ${{ github.event.number }}
