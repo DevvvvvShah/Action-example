@@ -9,17 +9,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: peter-evans/create-or-update-comment@v3
+        if: ${{ true }}
         with:
           issue-number: ${{ github.event.issue.number }}
-          if: ${{ true }}
           #simulation of tests on PR, since there's nothing to test rn
           body: |
               PR valid, wait for acceptance. Link the issue fixed if you haven't yet
           reactions: '+1'
       - uses: peter-evans/create-or-update-comment@v3
+        if: ${{ false }}
         with:
           issue-number: ${{ github.event.issue.number }}
-          if: ${{ false }}
+          
           #simulation of tests on PR, since there's nothing to test rn
           body: |
             PR can't pass tests, something's wrong. Please fix it and try again
